@@ -108,3 +108,14 @@ class TestR3(unittest.TestCase):
     def test_cross04(self):
         self.assertEqual(R3ApproxMatcher(self.a.cross(R3(3.0, -2.0, 1.0))),
                          R3(8.0, 8.0, -8.0))
+
+    def test_isgood(self):
+        self.b = R3(-1.5, 1.3, 236.78)
+        self.assertFalse(self.a.is_good())
+        self.assertTrue(self.b.is_good())
+
+    def test_isg2(self):
+        self.b = R3(0.6, -0.8, -2360.78)
+        self.c = R3(2, 0, 7)
+        self.assertFalse(self.b.is_good())
+        self.assertFalse(self.c.is_good())

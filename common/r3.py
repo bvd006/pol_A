@@ -42,6 +42,9 @@ class R3:
             self.z * other.x - self.x * other.z,
             self.x * other.y - self.y * other.x)
 
+    def is_good(self):
+        return 1 < (self.x**2 + self.y**2) < 4
+
 
 if __name__ == "__main__":  # pragma: no cover
     x = R3(1.0, 1.0, 1.0)

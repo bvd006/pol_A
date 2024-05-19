@@ -116,6 +116,20 @@ class Facet:
         return sum(self.vertexes, R3(0.0, 0.0, 0.0)) * \
             (1.0 / len(self.vertexes))
 
+    def is_good(self):
+        return self.center().is_good()
+
+    def proj_area(self):
+        s = 0
+        for i in range(2, len(self.vertexes)):
+            v1 = R3(self.vertexes[i - 1].x - self.vertexes[0].x,
+                    self.vertexes[i - 1].y - self.vertexes[0].y, 0)
+            v2 = R3(self.vertexes[i].x - self.vertexes[0].x,
+                    self.vertexes[i].y - self.vertexes[0].y, 0)
+            vi = v1.cross(v2)
+            s += abs(vi.z) * 0.5
+        return float(s)
+
 
 class Polyedr:
     """ Полиэдр """
@@ -127,6 +141,7 @@ class Polyedr:
 
         # списки вершин, рёбер и граней полиэдра
         self.vertexes, self.edges, self.facets = [], [], []
+        self.Number = 0.0
 
         # список строк файла
         with open(file) as f:
@@ -158,6 +173,13 @@ class Polyedr:
                         self.edges.append(Edge(vertexes[n - 1], vertexes[n]))
                     # задание самой грани
                     self.facets.append(Facet(vertexes))
+                    if self.facets[-1].is_good():
+                        self.Number += self.facets[-1].proj_area()
+
+    def get_area(self):
+        # print([ [w.center().x,w.center().y,w.center().z]
+        # for w in self.facets])
+        return self.Number
 
     # Метод изображения полиэдра
     def draw(self, tk):  # pragma: no cover

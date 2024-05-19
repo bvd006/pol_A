@@ -28,6 +28,22 @@ class TestPolyedr(unittest.TestCase):
             self.polyedr = Polyedr(fake_file_path)
             _file.assert_called_once_with(fake_file_path)
 
+        fake_file_content2 = """1.0	0.0	0.0	0.0
+4	4	12
+0.0	0.0	0.0
+3.0	1.0	0.0
+3.0	-1.0	0.0
+2.0	0.0	3.0
+3	1    2    3
+3	1    2    4
+3	1    3    4
+3	3    2    4"""
+        fake_file_path2 = 'data/testp.geom'
+        with patch('shadow.polyedr.open'.format(__name__),
+                   new=mock_open(read_data=fake_file_content2)) as _file:
+            self.polyedr2 = Polyedr(fake_file_path2)
+            _file.assert_called_once_with(fake_file_path2)
+
     def test_num_vertexes(self):
         self.assertEqual(len(self.polyedr.vertexes), 8)
 
@@ -36,3 +52,6 @@ class TestPolyedr(unittest.TestCase):
 
     def test_num_edges(self):
         self.assertEqual(len(self.polyedr.edges), 16)
+
+    def test_good_area(self):
+        self.assertAlmostEqual(self.polyedr2.get_area(), 2)

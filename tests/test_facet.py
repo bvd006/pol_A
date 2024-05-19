@@ -70,3 +70,18 @@ class TestVoid(unittest.TestCase):
     def test_center02(self):
         f = Facet([R3(0.0, 0.0, 0.0), R3(3.0, 0.0, 0.0), R3(0.0, 3.0, 0.0)])
         self.assertEqual(R3ApproxMatcher(f.center()), (R3(1.0, 1.0, 0.0)))
+
+    def test_isg1(self):
+        f = Facet([R3(0.0, 0.0, 0.0), R3(0.306, 0.798, 456),
+                   R3(-0.9995, 0.309, 0.0001)])
+        g = Facet([R3(4, -101, 7), R3(2, 100, 77), R3(-1.5, -2, 777)])
+        self.assertFalse(f.is_good())
+        self.assertTrue(g.is_good())
+
+    def test_area(self):
+        f = Facet([R3(-1.0, 0.0, 50.0), R3(-1.0, -1.5, 0.0),
+                   R3(0.5, 0.0, 770.7), R3(0.5, -1.5, -0.05)])
+        g = Facet([R3(1.0, 0.0, 50.0), R3(0.0, 2, 0.0), R3(3, 4, 0.0),
+                   R3(5, 2, 0.0), R3(4, 0, 0.0), R3(3, -1, 0.0)])
+        self.assertAlmostEqual(f.proj_area(), 2.25)
+        self.assertAlmostEqual(g.proj_area(), 14.5)
