@@ -168,13 +168,16 @@ class Polyedr:
                     size = int(buf.pop(0))
                     # массив вершин этой грани
                     vertexes = list(self.vertexes[int(n) - 1] for n in buf)
+                    in_vertexes = list(self.vertexes[int(n) - 1].rz(-gamma).ry(
+                        -beta).rz(-alpha)*(1.0/c) for n in buf)
                     # задание рёбер грани
                     for n in range(size):
                         self.edges.append(Edge(vertexes[n - 1], vertexes[n]))
                     # задание самой грани
                     self.facets.append(Facet(vertexes))
-                    if self.facets[-1].is_good():
-                        self.Number += self.facets[-1].proj_area()
+                    tmp_facet = Facet(in_vertexes)
+                    if tmp_facet.is_good():
+                        self.Number += tmp_facet.proj_area()
 
     def get_area(self):
         # print([ [w.center().x,w.center().y,w.center().z]
